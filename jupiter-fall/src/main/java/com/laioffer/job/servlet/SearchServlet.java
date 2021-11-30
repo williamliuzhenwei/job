@@ -1,5 +1,7 @@
 package com.laioffer.job.servlet;
 
+import com.laioffer.job.external.GitHubClient;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -9,7 +11,16 @@ import java.io.IOException;
 public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.getWriter().write("This is SearchServlet");
+        double lat = Double.parseDouble(request.getParameter("lat"));
+        double lon = Double.parseDouble(request.getParameter("lon"));
+
+        GitHubClient client = new GitHubClient();
+
+        String itemsString = client.search(lat, lon, null);
+
+        response.setContentType("application/json");
+        response.getWriter().print(itemsString);
+
     }
 
     @Override
